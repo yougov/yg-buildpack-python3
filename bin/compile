@@ -134,6 +134,10 @@ source $BIN_DIR/steps/pylibmc
 # Activate the Virtualenv.
 source $VIRTUALENV_LOC/bin/activate
 
+# Upgrade setuptools and pip
+easy_install -U setuptools
+easy_install -U pip
+
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
   pip install --use-mirrors mercurial | indent
