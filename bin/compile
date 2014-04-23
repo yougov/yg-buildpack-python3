@@ -109,10 +109,10 @@ mkdir -p $(dirname $PROFILE_PATH)
 
 set +e
 puts-step "Preparing Python interpreter ($PYTHON_VERSION)"
-puts-step "Creating Virtualenv ($(virtualenv --version))"
+puts-step "Creating venv"
 
 # Try to create the virtualenv.
-OUT=$(virtualenv --setuptools --python $PYTHON_EXE --never-download --prompt='(venv) ' $VIRTUALENV_LOC 2>&1)
+OUT=$($PYTHON_EXE -m venv $VIRTUALENV_LOC 2>&1)
 
 [ $? -ne 0 -o -n "$CLEAN_VIRTUALENV" ] && {
   if [ -n "$CLEAN_VIRTUALENV" ]
@@ -122,7 +122,7 @@ OUT=$(virtualenv --setuptools --python $PYTHON_EXE --never-download --prompt='(v
 
   rm -fr $VIRTUALENV_LOC &> /dev/null || true
 
-  OUT=$(virtualenv --setuptools --python $PYTHON_EXE --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
+  OUT=$($PYTHON_EXE -m venv $VIRTUALENV_LOC --clear)
 }
 echo "$OUT"  | indent
 set -e
@@ -134,9 +134,9 @@ source $BIN_DIR/steps/pylibmc
 # Activate the Virtualenv.
 source $VIRTUALENV_LOC/bin/activate
 
-# Upgrade setuptools and pip
-easy_install -U setuptools
-easy_install -U pip
+# Install setuptools and pip
+wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python
+easy_install -i http://cheese.yougov.net -U pip
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
@@ -155,15 +155,6 @@ if [ "$NAME" = "Python/Django" ]; then
   source $BIN_DIR/steps/django
 fi
 
-# Make Virtualenv's paths relative for portability.
-set +e
-OUT=$(virtualenv --python $PYTHON_EXE  --relocatable $VIRTUALENV_LOC)
-[ $? -ne 0 ] && {
-  puts-warn "Error making virtualenv relocatable"
-  echo "$OUT" | indent
-  exit 1
-}
-set -e
 
 # ### Finalize
 #
@@ -180,7 +171,6 @@ set-default-env PYTHONUNBUFFERED true
 set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
 set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
 set-default-env LANG en_US.UTF-8
-set-default-env PYTHONHASHSEED random
 set-default-env PYTHONHOME /app/.heroku/venv/
 set-default-env PYTHONPATH /app/
 
