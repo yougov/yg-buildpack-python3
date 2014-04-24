@@ -110,24 +110,11 @@ mkdir -p $(dirname $PROFILE_PATH)
 
 set +e
 puts-step "Preparing Python interpreter ($PYTHON_VERSION)"
+
+# Create the virtualenv.
 puts-step "Creating venv"
-
-# Try to create the virtualenv.
-mkdir -p $VIRTUALENV_LOC/
-OUT=$($PYTHON_EXE -m venv $VIRTUALENV_LOC 2>&1)
-
-[ $? -ne 0 -o -n "$CLEAN_VIRTUALENV" ] && {
-  if [ -n "$CLEAN_VIRTUALENV" ]
-    then echo " !     CLEAN_VIRTUALENV set, rebuilding virtualenv."
-    else echo " !     Virtualenv corrupt, rebuilding."
-  fi
-
-  rm -fr $VIRTUALENV_LOC &> /dev/null || true
-
-  OUT=$($PYTHON_EXE -m venv $VIRTUALENV_LOC --clear)
-}
-echo "$OUT"  | indent
-set -e
+rm -R $VIRTUALENV_LOC
+$PYTHON_EXE -m venv $VIRTUALENV_LOC | indent
 
 # Pylibmc support.
 # See [`bin/steps/pylibmc`](pylibmc.html).
