@@ -13,7 +13,6 @@ config_vars:
   LIBRARY_PATH: /app/.heroku/vendor/lib
   LD_LIBRARY_PATH: /app/.heroku/vendor/lib
   LANG: en_US.UTF-8
-  PYTHONHOME: /app/.heroku/venv/
   PYTHONPATH: /app/
 EOF
 
