@@ -7,7 +7,8 @@
 # A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
 # adapter between a Python application and Heroku's runtime.
 #
-# You can intreract with the Heroku API directly with [heroku.py](https://github.com/heroku/heroku.py/).
+# You can intreract with the Heroku API directly with
+# [heroku.py](https://github.com/heroku/heroku.py/).
 #
 # See also: [Release history](/changelog.html), [Detection](/detect.html).
 #
@@ -50,12 +51,12 @@ PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".heroku/venv"
-LEGACY_TRIGGER="lib/python3.3"
+LEGACY_TRIGGER="lib/python3.4"
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 
 # Python version. This will be used in the future to specify custom Pythons.
-PYTHON_VERSION="3.3.4"
-PYTHON_EXE="python3.3"
+PYTHON_VERSION="3.4.0"
+PYTHON_EXE="python3.4"
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
@@ -112,6 +113,7 @@ puts-step "Preparing Python interpreter ($PYTHON_VERSION)"
 puts-step "Creating venv"
 
 # Try to create the virtualenv.
+mkdir -p $VIRTUALENV_LOC/
 OUT=$($PYTHON_EXE -m venv $VIRTUALENV_LOC 2>&1)
 
 [ $? -ne 0 -o -n "$CLEAN_VIRTUALENV" ] && {
@@ -133,10 +135,6 @@ source $BIN_DIR/steps/pylibmc
 
 # Activate the Virtualenv.
 source $VIRTUALENV_LOC/bin/activate
-
-# Install setuptools and pip
-wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python
-python -m easy_install -i http://cheese.yougov.net -U pip
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
