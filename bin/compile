@@ -121,7 +121,7 @@ $PYTHON_EXE -m venv $VIRTUALENV_LOC | indent
 source $BIN_DIR/steps/pylibmc
 
 # Activate the Virtualenv.
-source $VIRTUALENV_LOC/bin/activate
+export PATH=$VIRTUALENV_LOC/bin:$PATH
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
