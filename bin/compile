@@ -108,12 +108,13 @@ mkdir -p $(dirname $PROFILE_PATH)
 # Create the virtualenv. Rebuild if corrupt.
 # TODO: Bootstrap a bottled Python VM...
 
-set +e
 puts-step "Preparing Python interpreter ($PYTHON_VERSION)"
 
 # Create the virtualenv.
 puts-step "Creating venv"
+set +e
 rm -R $VIRTUALENV_LOC
+set -e
 $PYTHON_EXE -m venv $VIRTUALENV_LOC | indent
 
 # Pylibmc support.
