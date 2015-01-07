@@ -115,7 +115,9 @@ puts-step "Creating venv"
 set +e
 rm -R $VIRTUALENV_LOC
 set -e
-$PYTHON_EXE -m venv --copies $VIRTUALENV_LOC | indent
+# https://bugs.launchpad.net/ubuntu/+source/python3.4/+bug/1290847/comments/58
+$PYTHON_EXE -m venv --without-pip --copies $VIRTUALENV_LOC | indent
+wget https://bootstrap.pypa.io/get-pip.py -O - | $VIRTUALENV_LOC/bin/python
 
 # Pylibmc support.
 # See [`bin/steps/pylibmc`](pylibmc.html).
