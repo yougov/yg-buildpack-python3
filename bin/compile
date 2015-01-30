@@ -143,6 +143,8 @@ if [ "$NAME" = "Python/Django" ]; then
   source $BIN_DIR/steps/django
 fi
 
+# Relocate venv
+source $BIN_DIR/steps/relocate
 
 # ### Finalize
 #
