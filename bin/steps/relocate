@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+puts-step "Making venv relocatable"
+
+VIRTUALENV_BINDIR=$VIRTUALENV_LOC/bin
+HEADER='#!/usr/bin/env python3.4\n\nimport os\nactivate_this=os.path.join(os.path.dirname(os.path.realpath(__file__)), "activate_this.py")\nexec(compile(open(activate_this).read(), activate_this, "exec"))\ndel os, activate_this\n'
+
+puts-step "Copying activate script"
+cp $BIN_DIR/steps/activate_this.py $VIRTUALENV_BINDIR
+puts-step "Rewriting headers"
+for exe in $VIRTUALENV_BINDIR/*; do
+    puts-step "Doing" $exe
+    sed -i "0,/^#!.*python.*$/s||$HEADER|" $exe
+done;
+puts-step "Done"
