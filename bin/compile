@@ -135,7 +135,7 @@ fi
 export PYTHONUNBUFFERED=1
 
 # Install dependencies with Pip.
-puts-step "Installing dependencies using pip ($(pip --version | awk '{print $2}'))"
+puts-step "Installing dependencies using pip ($(python -m pip --version | awk '{print $2}'))"
 python -m pip install -r requirements.txt --exists-action=w --src=./.heroku/src | indent
 
 # Django collectstatic support.
