@@ -134,28 +134,28 @@ fi
 # Get the output as it comes, even in non-interactive mode
 export PYTHONUNBUFFERED=1
 
-# Install dependencies with Pip.
 puts-step "Installing dependencies using pip ($(python -m pip --version | awk '{print $2}'))"
 python -m pip install -r requirements.txt --exists-action=w --src=./.heroku/src | indent
 
 # Django collectstatic support.
 if [ "$NAME" = "Python/Django" ]; then
+  puts-step "Running $BIN_DIR/steps/django"
   source $BIN_DIR/steps/django
 fi
 
-# Relocate venv
+puts-step "Relocating venv"
 source $BIN_DIR/steps/relocate
 
 # ### Finalize
 #
 
-# Store new artifacts in cache.
+puts-step "Storing new artifacts in cache"
 for dir in $CACHED_DIRS; do
   rm -rf $CACHE_DIR/$dir
   cp -R $dir $CACHE_DIR/
 done
 
-# Set context environment variables.
+puts-step "Setting context environment variables"
 set-env PATH '$HOME/.heroku/venv/bin:$PATH'
 set-default-env PYTHONUNBUFFERED true
 set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
@@ -166,7 +166,10 @@ set-default-env PYTHONPATH /app/
 
 # ### Fin.
 
-# Experimental post_compile hook.
+# Experimental.
+puts-step "Running post_compile hook"
 source $BIN_DIR/steps/hooks/post_compile
+
+puts-step "Finished compiling."
 
 # <a href="http://github.com/heroku/heroku-buildpack-python"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://d3nwyuy0nl342s.cloudfront.net/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub"></a>
