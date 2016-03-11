@@ -33,3 +33,12 @@ function set-env (){
 function set-default-env (){
   echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
 }
+
+# Run a hook script
+function run-hook () {
+    if [ -f $1 ]; then
+        echo "-----> Running $1 hook"
+        chmod +x $1
+        env PATH=$VIRTUALENV_LOC/bin:$PATH VIRTUALENV_LOC=$VIRTUALENV_LOC $1
+    fi
+}

@@ -73,8 +73,8 @@ source $BIN_DIR/utils
 # Switch to the repo's context.
 cd $BUILD_DIR
 
-# Experimental pre_compile hook.
-source $BIN_DIR/steps/hooks/pre_compile
+# Run pre_compile hook.
+run-hook bin/pre_compile
 
 # If no requirements given, assume `setup.py develop`.
 if [ ! -f requirements.txt ]; then
@@ -123,6 +123,12 @@ wget https://bootstrap.pypa.io/get-pip.py -O - | $VIRTUALENV_LOC/bin/python
 # See [`bin/steps/pylibmc`](pylibmc.html).
 source $BIN_DIR/steps/pylibmc
 
+# Run pre_activate venv hook
+run-hook bin/pre_activate
+
+# Run post_activate venv hook
+run-hook bin/post_activate
+
 # Activate the Virtualenv.
 export PATH=$VIRTUALENV_LOC/bin:$PATH
 
@@ -166,9 +172,8 @@ set-default-env PYTHONPATH /app/
 
 # ### Fin.
 
-# Experimental.
-puts-step "Running post_compile hook"
-source $BIN_DIR/steps/hooks/post_compile
+# Run post_compile hook.
+run-hook bin/post_compile
 
 puts-step "Finished compiling."
 
