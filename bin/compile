@@ -175,7 +175,7 @@ set-default-env PYTHONPATH /app/
 # Run post_compile hook.
 run-hook bin/post_compile
 
-# $BIN_DIR/steps/publish-libs
+$BIN_DIR/steps/publish-libs || true
 
 puts-step "Finished compiling."
 
