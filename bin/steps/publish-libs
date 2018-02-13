@@ -4,4 +4,4 @@
 # tree for that app.
 
 pip install pipdeptree jaraco.packaging jaraco.mongodb
-pipdeptree --json | python -m jaraco.packaging.make-tree $(python setup.py --name) | jq . + '{"language": "'"$(python -V)"'"}' | python -m jaraco.mongodb.insert-doc mongodb://mgo-co-3/YouGov.packages
+pipdeptree --json | python -m jaraco.packaging.make-tree $(python setup.py --name) | sed 's/{/{"language": "'"$(python -V)"'", /' | python -m jaraco.mongodb.insert-doc mongodb://mgo-co-3/YouGov.packages
