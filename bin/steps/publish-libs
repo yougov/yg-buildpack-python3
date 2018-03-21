@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# try to guess app name using setup.py --name and generate a dependency
-# tree for that app.
+# use pipdeptree generate a dependency tree for the app and
+# publish it to MongoDB.
 
 pip install pipdeptree jaraco.mongodb
 pipdeptree --json | sed 's/\[/{"language": "'"$(python -V)"'", "packages": [/' | sed 's/]$/]}/' | python -m jaraco.mongodb.insert-doc mongodb://mgo-co-3/YouGov.packages
