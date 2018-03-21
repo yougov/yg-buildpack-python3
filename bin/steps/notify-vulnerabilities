@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+pip install safety
+vulnerabilities=$(safety check --bare)
+if [[ -n "$vulnerabilities" && -n "$SLACK_SECURITY_URL" ]] curl -X POST \
+	$SLACK_SECURITY_URL \
+	-H "Content-Type: application/json" \
+	-d "{\"text\": \"Vulnerabilites detected building $BUILD_DIR: $vulnerabilities\"}"

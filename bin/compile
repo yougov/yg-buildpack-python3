@@ -176,6 +176,7 @@ set-default-env PYTHONPATH /app/
 run-hook bin/post_compile
 
 $BIN_DIR/steps/publish-libs || true
+$BIN_DIR/steps/notify-vulnerable || true
 
 puts-step "Finished compiling."
 
