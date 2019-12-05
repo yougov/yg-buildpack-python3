@@ -73,6 +73,14 @@ source $BIN_DIR/utils
 # Switch to the repo's context.
 cd $BUILD_DIR
 
+# Export custom env vars if defined
+if [ -f bin/compile_env ]; then
+    puts-step "Exporting variables from bin/compile_env"
+    set -o allexport
+    source bin/compile_env
+    set +o allexport
+fi
+
 # Run pre_compile hook.
 run-hook bin/pre_compile
 
