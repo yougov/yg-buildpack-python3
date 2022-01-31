@@ -125,7 +125,11 @@ rm -R $VIRTUALENV_LOC
 set -e
 # https://bugs.launchpad.net/ubuntu/+source/python3.4/+bug/1290847/comments/58
 $PYTHON_EXE -m venv --without-pip --copies $VIRTUALENV_LOC | indent
+if [[ $PYTHON_VERSION == 3\.6* ]]; then
+wget https://bootstrap.pypa.io/pip/3.6/get-pip.py -O - | $VIRTUALENV_LOC/bin/python
+else
 wget https://bootstrap.pypa.io/get-pip.py -O - | $VIRTUALENV_LOC/bin/python
+fi
 
 # Pylibmc support.
 # See [`bin/steps/pylibmc`](pylibmc.html).
